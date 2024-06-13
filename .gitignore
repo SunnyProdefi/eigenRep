@@ -39,3 +39,5 @@
 /bazel-eigenRep
 /bazel-out
 /bazel-testlogs
+
+.cache

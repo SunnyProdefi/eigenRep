@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.29)
 project(MyProject VERSION 1.0 LANGUAGES CXX)
 
 find_package(Eigen3 REQUIRED)
@@ -17,3 +17,27 @@ target_link_libraries(eigenEx4 Eigen3::Eigen)
 
 add_executable(wheelchairXYZ wheelchairXYZ.cpp)
 target_link_libraries(wheelchairXYZ Eigen3::Eigen)
+
+add_executable(minimize_joint_velocities minimize_joint_velocities.cpp)
+target_link_libraries(minimize_joint_velocities Eigen3::Eigen)
+
+add_executable(moore_penrose_example moore_penrose_example.cpp)
+target_link_libraries(moore_penrose_example Eigen3::Eigen)
+
+add_executable(FirstOrderLowPassFilter FirstOrderLowPassFilter.cpp)
+target_link_libraries(FirstOrderLowPassFilter Eigen3::Eigen)
+
+add_executable(FirstOrderLowPassFilter2 FirstOrderLowPassFilter2.cpp)
+target_link_libraries(FirstOrderLowPassFilter2 Eigen3::Eigen)
+
+add_executable(ReferenceExample ReferenceExample.cpp)
+target_link_libraries(ReferenceExample Eigen3::Eigen)
+
+add_executable(HighPassFilter HighPassFilter.cpp)
+target_link_libraries(HighPassFilter Eigen3::Eigen)
+
+add_executable(SecondOrderIIRFilter SecondOrderIIRFilter.cpp)
+target_link_libraries(SecondOrderIIRFilter Eigen3::Eigen)
+
+add_executable(CubicSplineInterpolator CubicSplineInterpolator.cpp)
+target_link_libraries(CubicSplineInterpolator Eigen3::Eigen)
