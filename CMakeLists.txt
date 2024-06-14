@@ -41,3 +41,6 @@ target_link_libraries(SecondOrderIIRFilter Eigen3::Eigen)
 
 add_executable(CubicSplineInterpolator CubicSplineInterpolator.cpp)
 target_link_libraries(CubicSplineInterpolator Eigen3::Eigen)
+
+add_executable(BSplineTrajectoryGenerator BSplineTrajectoryGenerator.cpp)
+target_link_libraries(BSplineTrajectoryGenerator Eigen3::Eigen)
