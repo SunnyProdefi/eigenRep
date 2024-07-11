@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.29)
 project(MyProject VERSION 1.0 LANGUAGES CXX)
+# 设置 C++ 标准为 C++11
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)  # 确保编译器支持 C++11
 
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
@@ -44,3 +47,18 @@ target_link_libraries(CubicSplineInterpolator Eigen3::Eigen)
 
 add_executable(BSplineTrajectoryGenerator BSplineTrajectoryGenerator.cpp)
 target_link_libraries(BSplineTrajectoryGenerator Eigen3::Eigen)
+
+add_executable(InteriorPointQP InteriorPointQP.cpp)
+target_link_libraries(InteriorPointQP Eigen3::Eigen)
+
+add_executable(extract_rotation_axis_angle extract_rotation_axis_angle.cpp)
+target_link_libraries(extract_rotation_axis_angle Eigen3::Eigen)
+
+add_executable(ExtractRotationAxisAndAngle ExtractRotationAxisAndAngle.cpp)
+target_link_libraries(ExtractRotationAxisAndAngle Eigen3::Eigen)
+
+add_executable(wbc wbc.cpp)
+target_link_libraries(wbc Eigen3::Eigen)
+
+add_executable(mathCubicSplineInterpolator mathCubicSplineInterpolator.cpp)
+target_link_libraries(mathCubicSplineInterpolator Eigen3::Eigen)
