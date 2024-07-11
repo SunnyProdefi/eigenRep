@@ -112,49 +112,31 @@ public:
 };
 
 class Spline2D {
-private:
+public:
   std::vector<double> s;
   std::vector<double> ds;
   Spline sx, sy;
 
   std::vector<double> calcS(const std::vector<double> &x,
                             const std::vector<double> &y) {
-    std::cout << "x.size():" << x.size() << std::endl;
     std::vector<double> dx(x.size() - 1);
-    std::cout << "dx.size():" << dx.size() << std::endl;
     std::vector<double> dy(y.size() - 1);
-    std::cout << "dy.size():" << dy.size() << std::endl;
     std::transform(x.begin() + 1, x.end(), x.begin(), dx.begin(),
                    std::minus<double>());
     std::transform(y.begin() + 1, y.end(), y.begin(), dy.begin(),
                    std::minus<double>());
-    std::cout << "dx.size():" << dx.size() << std::endl;
     ds.resize(dx.size());
-    std::cout << "ds.size():" << ds.size() << std::endl;
-    // 确保 dx 和 dy 的内容正确
     for (size_t i = 0; i < dx.size(); ++i) {
-      std::cout << "dx[" << i << "]: " << dx[i] << std::endl;
-      std::cout << "dy[" << i << "]: " << dy[i] << std::endl;
-    }
-    for (size_t i = 0; i < dx.size(); ++i) {
-      std::cout << "dx[" << i << "]:" << dx[i] << std::endl;
       ds[i] = std::sqrt(dx[i] * dx[i] + dy[i] * dy[i]);
-      std::cout << "ds[" << i << "]:" << ds[i] << std::endl;
     }
-    std::cout << "ds.size():" << ds.size() << std::endl;
     std::vector<double> s;
     s.push_back(0);
-    std::cout << "s.size():" << s.size() << std::endl;
     std::partial_sum(ds.begin(), ds.end(), std::back_inserter(s));
-    std::cout << "s.size():" << s.size() << std::endl;
     return s;
   }
 
-public:
   Spline2D(const std::vector<double> &x, const std::vector<double> &y)
-      : s(calcS(x, y)), sx(s, x), sy(s, y) {
-    std::cout << "s.size():" << s.size() << std::endl;
-  }
+      : s(calcS(x, y)), sx(s, x), sy(s, y) {}
 
   std::pair<double, double> calcPosition(double s_val) {
     double x = sx.calc(s_val);
@@ -179,17 +161,62 @@ public:
   }
 };
 
-int main() {
-  std::vector<double> x = {0.0, 15.0, 30.0, 50.0, 60.0};
-  std::vector<double> y = {0.0, 40.0, 15.0, 30.0, 10.0};
-  Spline spline(x, y);
-  std::cout << spline.calc(1) << std::endl;
-  std::cout << spline.calcd(1) << std::endl;
-  std::cout << spline.calcdd(1) << std::endl;
+// int main() {
+//   std::vector<double> x = {0.0, 15.0, 30.0, 50.0, 60.0};
+//   std::vector<double> y = {0.0, 40.0, 15.0, 30.0, 0.0};
+//   Spline spline(x, y);
+//   std::cout << spline.calc(1) << std::endl;
+//   std::cout << spline.calcd(1) << std::endl;
+//   std::cout << spline.calcdd(1) << std::endl;
 
-  Spline2D spline2d(x, y);
-  //   std::cout << spline2d.calcCurvature(0.5) << std::endl;
-  //   std::cout << spline2d.calcYaw(0.5) << std::endl;
+//   Spline2D spline2d(x, y);
+//   std::cout << spline2d.calcCurvature(0.5) << std::endl;
+//   std::cout << spline2d.calcYaw(0.5) << std::endl;
+
+//   return 0;
+// }
+
+std::vector<double> linspace(double start, double end, double step) {
+  std::vector<double> result;
+  for (double val = start; val <= end; val += step) {
+    result.push_back(val);
+  }
+  return result;
+}
+
+void calc_spline_course(const std::vector<double> &x,
+                        const std::vector<double> &y, double ds,
+                        std::vector<double> &rx, std::vector<double> &ry,
+                        std::vector<double> &ryaw, std::vector<double> &rk,
+                        std::vector<double> &s) {
+  std::cout << "calc_spline_course" << std::endl;
+  Spline2D sp(x, y); // 创建二维样条曲线对象
+  std::cout << "s.back(): " << sp.s.back() << std::endl;
+  s = linspace(0, sp.s.back(), ds); //生成从0到样条曲线总长度，间隔为ds的数组
+
+  for (double i_s : s) {                  // 遍历每一个曲线长度值
+    auto [ix, iy] = sp.calcPosition(i_s); // 计算当前位置的x, y坐标
+    rx.push_back(ix); // 将计算得到的x坐标添加到列表中
+    ry.push_back(iy); // 将计算得到的y坐标添加到列表中
+    ryaw.push_back(sp.calcYaw(i_s)); // 计算并添加当前位置的偏航角
+    rk.push_back(sp.calcCurvature(i_s)); // 计算并添加当前位置的曲率
+  }
+}
+
+int main() {
+  std::vector<double> ax = {0.0, 15.0, 30.0, 50.0, 60.0}; // 参考路径的x坐标
+  std::vector<double> ay = {0.0, 40.0, 15.0, 30.0, 0.0}; // 参考路径的y坐标
+  double ds = 1;                                         // 间隔距离
+
+  std::vector<double> cx, cy, cyaw, ck, s;
+  std::cout << "calc_spline_course" << std::endl;
+  calc_spline_course(ax, ay, ds, cx, cy, cyaw, ck, s); // 计算样条曲线路径
+
+  // 输出结果
+  for (size_t i = 0; i < cx.size(); ++i) {
+    std::cout << "x: " << cx[i] << ", y: " << cy[i] << ", yaw: " << cyaw[i]
+              << ", curvature: " << ck[i] << ", s: " << s[i] << std::endl;
+  }
 
   return 0;
 }

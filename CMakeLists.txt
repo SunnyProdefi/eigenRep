@@ -62,3 +62,6 @@ target_link_libraries(wbc Eigen3::Eigen)
 
 add_executable(mathCubicSplineInterpolator mathCubicSplineInterpolator.cpp)
 target_link_libraries(mathCubicSplineInterpolator Eigen3::Eigen)
+
+add_executable(demo demo.cpp)
+target_link_libraries(demo Eigen3::Eigen)
