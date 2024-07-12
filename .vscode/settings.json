@@ -64,6 +64,8 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "bit": "cpp"
+        "bit": "cpp",
+        "dense": "cpp",
+        "*.tpp": "cpp"
     }
 }

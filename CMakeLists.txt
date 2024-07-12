@@ -5,7 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)  # 确保编译器支持 C++11
 
 find_package(Eigen3 REQUIRED)
+find_package(OsqpEigen REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
+
 add_executable(eigenEx1 eigenEx1.cpp)
 target_link_libraries(eigenEx1 Eigen3::Eigen)
 
@@ -61,7 +63,10 @@ add_executable(wbc wbc.cpp)
 target_link_libraries(wbc Eigen3::Eigen)
 
 add_executable(mathCubicSplineInterpolator mathCubicSplineInterpolator.cpp)
-target_link_libraries(mathCubicSplineInterpolator Eigen3::Eigen)
+target_link_libraries(mathCubicSplineInterpolator Eigen3::Eigen OsqpEigen::OsqpEigen)
+
+add_executable(OSQP OSQP.cpp)
+target_link_libraries(OSQP Eigen3::Eigen OsqpEigen::OsqpEigen)
 
 add_executable(demo demo.cpp)
 target_link_libraries(demo Eigen3::Eigen)
